@@ -27,9 +27,12 @@ export class PostlistComponent implements OnInit {
   
  
   Upvoted(i:number) {
-    console.log(i);
     this.posts[i].upvotes = this.posts[i].upvotes + 1;
-
+    this.postService.putPost(this.posts[i])
+    .subscribe(
+      (data1: any) => console.log( data1),
+        (error) => console.log(error),
+    );
     // this.postService.storePost(this.posts)
     // .subscribe((posts: posts[i]) => {
     //   this.posts[i].upvotes = this.posts[i].upvotes + 1;
