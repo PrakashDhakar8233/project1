@@ -3,4 +3,5 @@ export interface posts {
     description: string;
     creationDate: string;
     upvotes:number;
+    id: string;
 }
