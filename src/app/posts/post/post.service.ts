@@ -23,15 +23,15 @@ export class PostService {
   addPost(title: string, content: string){
     const post: posts = {title: title, description: content,
     creationDate: Date(), upvotes:0};
-    this.posts.push(post);
-    this.storePost(this.posts)
+    //this.posts.push(post);
+    this.storePost(post)
     .subscribe(
       // (response) => console.log(response),
       // (error) => console.log(error)
     );
     
   }
-  storePost(strPost: any[]){
+  storePost(strPost: any){
    return this.http.post('https://myjtcproject.firebaseio.com/post.json',strPost)
   }
   getServerpost(){
@@ -39,7 +39,15 @@ export class PostService {
     .map(
       (response: Response) =>{
         const data =response.json();
-        return data
+        let post = [];
+        if(data == null){
+          return post;
+        }
+        for(var prop in data) {  
+          post.push(data[prop]);
+        
+        }
+        return post;
       }
     )
   }
