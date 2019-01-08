@@ -4,6 +4,7 @@ import 'rxjs/Rx';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Http, Response } from '@angular/http';
+import { post } from 'selenium-webdriver/http';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class PostService {
 
   addPost(title: string, content: string){
     const post: posts = {title: title, description: content,
-    creationDate: Date(), upvotes:0};
+    creationDate: Date(), upvotes:0, id:''};
     //this.posts.push(post);
     this.storePost(post)
     .subscribe(
@@ -34,20 +35,26 @@ export class PostService {
   storePost(strPost: any){
    return this.http.post('https://myjtcproject.firebaseio.com/post.json',strPost)
   }
+
+  putPost(strPost: posts){
+    var path = 'https://myjtcproject.firebaseio.com/post/' + strPost.id + '.json';
+    return this.http.put(path,strPost)
+   }
   getServerpost(){
     return this.http.get('https://myjtcproject.firebaseio.com/post.json')
     .map(
       (response: Response) =>{
         const data =response.json();
-        let post = [];
+        let posts = [];
         if(data == null){
-          return post;
+          return posts;
         }
-        for(var prop in data) {  
-          post.push(data[prop]);
-        
+        for(var prop in data) {
+          let post : posts = data[prop];
+          post.id = prop;
+          posts.push(post);
         }
-        return post;
+        return posts;
       }
     )
   }
